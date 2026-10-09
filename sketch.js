@@ -1,17 +1,27 @@
-let xMax = 400
+let xMax = 700
 let yMax = 700
 let xbunny = xMax/2
 let ybunny = yMax/2.3
+
+// animazione occhi
+let spostamentoX = 0;
+let spostamentoY = 0;
+let direzione = 1;
+
+// animazione carota
+let movimentoCarota = 0;
+let direzioneCarota = 1;
 
 function setup() {
   createCanvas(xMax, yMax);
 }
 
 function draw() {
-  background(255,255,255);
+  background(219,232,198);
 
+  //coniglio
   push();
-   translate(0, 40);
+   translate(-140, 40);
 
   //orecchia sinistra
   fill(220);
@@ -85,23 +95,25 @@ function draw() {
   strokeWeight(2);
   ellipse(xbunny-50, ybunny-15, 65, 65);
 
-  //pupilla sinistra
-  fill(0);
-  stroke (40);
-  strokeWeight(2);
-  ellipse(xbunny-42, ybunny-15, 15, 15);
-
   //occho destro
   fill(255);
   stroke (40);
   strokeWeight(2);
   ellipse(xbunny+50, ybunny-15, 65, 65);
-
-  //pupilla destra
-  fill(0);
-  stroke (40);
-  strokeWeight(2);
-  ellipse(xbunny+42, ybunny-15, 15, 15);
+  
+  // pupille - movimento automatico verso l'alto a destra
+  spostamentoX = spostamentoX + 0.2 * direzione;
+  spostamentoY = spostamentoY - 0.2 * direzione;
+    // quando raggiungono il limite, inverti la direzione
+    if (spostamentoX >= 8) {
+    spostamentoX = 8;
+    direzione = -1;
+    }
+    if (spostamentoX <= 0) {
+    spostamentoX = 0;
+    direzione = 1;
+    }
+  disegnaPupille();
 
   //baffi sinistri
   line(xbunny+15, ybunny+30, xbunny+130, ybunny+70);
@@ -154,6 +166,74 @@ function draw() {
   line(xbunny+45, ybunny+290, xbunny+45, ybunny+308);
   
   pop();
+  //nuvoletta
+  push();
 
+  fill(255, 255, 255);
+  stroke (40);
+  strokeWeight(2);
+  ellipse(xbunny+170, ybunny-130, 250, 200);  
+
+  fill(255, 255, 255);
+  stroke (40);
+  strokeWeight(2);
+  ellipse(xbunny+52, ybunny-25, 75, 50); 
+
+  fill(255, 255, 255);
+  stroke (40);
+  strokeWeight(2);
+  ellipse(xbunny-5, ybunny, 35, 20); 
+
+  pop();
+
+  // movimento verticale della carota
+  movimentoCarota += 0.3 * direzioneCarota;
+    if (movimentoCarota >= 7) {
+    movimentoCarota = 7;
+    direzioneCarota = -1;
+    }
+    if (movimentoCarota <= -7) {
+    movimentoCarota = -7;
+    direzioneCarota = 1;
+    }
+  
+  //carota
+  push();
+  translate(0, movimentoCarota);
+
+  //foglie della carota
+  fill(53, 130, 59);
+  stroke(40);
+  strokeWeight(2);
+  triangle (xbunny+200, ybunny-170,xbunny+170, ybunny-130, xbunny+200, ybunny-200);
+  
+  fill(53, 100, 59);
+  stroke(40);
+  strokeWeight(2);
+  triangle (xbunny+200, ybunny-170,xbunny+170, ybunny-130, xbunny+250, ybunny-180);
+
+  //carota
+  fill(255, 116, 32);
+  stroke(40);
+  strokeWeight(2);
+  triangle (xbunny+87, ybunny-85,xbunny+205, ybunny-130, xbunny+170, ybunny-170);
+  
+  pop();
 }
 
+  //movimento pupille
+  function disegnaPupille() {
+  fill(0);
+  stroke(40);
+  strokeWeight(2);
+  let xOcchi = [xbunny - 50, xbunny + 50];
+  let yOcchi = [ybunny - 15, ybunny - 15];
+  for (let i = 0; i < 2; i++) {
+    ellipse(
+      xOcchi[i] + spostamentoX,
+      yOcchi[i] + spostamentoY,
+      15,
+      15
+    );
+  }
+}
